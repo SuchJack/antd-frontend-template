@@ -54,7 +54,7 @@ const TestFilePage: React.FC = () => {
       <Card title="文件下载" loading={!value}>
         <div>文件地址：{COS_HOST + value}</div>
         <Divider />
-        <div>对象存储需要设置为共有读，否则无法访问</div>
+        <div>注意：Policy权限设置</div>
         <img src={COS_HOST + value} height={280} />
         <Divider />
         <Button

@@ -37,8 +37,8 @@ const PictureUploader: React.FC<Props> = (props) => {
         );
         // 拼接完整图片路径
         const fullPath = COS_HOST + res.data;
+        setLocalValue(fullPath) // 更新本地状态
         onChange?.(fullPath ?? '');
-        setLocalValue(fullPath)
         fileObj.onSuccess(fullPath);
       } catch (e: any) {
         message.error('上传失败，' + e.message);
