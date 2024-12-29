@@ -6,6 +6,7 @@ import { useEmotionCss } from '@ant-design/use-emotion-css';
 import { Helmet, history } from '@umijs/max';
 import { message, Tabs } from 'antd';
 import React, { useState } from 'react';
+// @ts-ignore
 import { Link } from 'umi';
 import Settings from '../../../../config/defaultSettings';
 
@@ -75,8 +76,8 @@ const UserRegisterPage: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" style={{ height: '100%' }} src="/logo.svg" />}
-          title="鱼厂招聘系统 - 注册"
-          subTitle={'高效招聘、爽快求职'}
+          title="Antd 模板系统 - 注册"
+          subTitle={'模板系统，模板系统'}
           initialValues={{
             autoLogin: true,
           }}

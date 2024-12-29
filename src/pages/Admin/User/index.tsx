@@ -1,12 +1,12 @@
 import CreateModal from '@/pages/Admin/User/components/CreateModal';
 import UpdateModal from '@/pages/Admin/User/components/UpdateModal';
-import { deleteUserUsingPost, listUserByPageUsingPost } from '@/services/backend/userController';
-import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { PageContainer, ProTable } from '@ant-design/pro-components';
+import {deleteUserUsingPost, listUserByPageUsingPost} from '@/services/backend/userController';
+import {PlusOutlined} from '@ant-design/icons';
+import type {ActionType, ProColumns} from '@ant-design/pro-components';
+import {PageContainer, ProTable} from '@ant-design/pro-components';
 import '@umijs/max';
-import { Avatar, Button, message, Popconfirm, Space, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
+import {Button, message, Popconfirm} from 'antd';
+import React, {useRef, useState} from 'react';
 
 /**
  * 用户管理页面
@@ -68,12 +68,39 @@ const UserAdminPage: React.FC = () => {
     {
       title: '头像',
       dataIndex: 'userAvatar',
-      valueType: 'text',
-      render: (userAvatar) => {
-        return (<Avatar size={50} src={userAvatar} />);
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
       },
+      // render: (userAvatar) => {
+      //   return (<Avatar size={50} src={userAvatar} />);
+      // },
+      // render(_,record) {
+      //   if (!record.userAvatar) {
+      //     return <Avatar size={50} icon={<UserOutlined />} />;
+      //   }
+      //   return <Avatar size={50} src={record.userAvatar} />;
+      // },
       hideInSearch: true,
     },
+    // {
+    //   title: '标签',
+    //   dataIndex: 'tags',
+    //   valueType: 'text',
+    //   renderFormItem: (schema) => {
+    //     const { fieldProps } = schema;
+    //     // @ts-ignore
+    //     return <Select {...fieldProps} mode="tags" />;
+    //   },
+    //   render(_, record) {
+    //     if (!record.tags) {
+    //       return <></>;
+    //     }
+    //     return JSON.parse(record.tags).map((tag: string) => {
+    //       return <Tag key={tag}>{tag}</Tag>;
+    //     });
+    //   },
+    // },
     {
       title: '简介',
       dataIndex: 'userProfile',
@@ -91,7 +118,7 @@ const UserAdminPage: React.FC = () => {
           text: '管理员',
           status: 'Error',
         },
-      },
+      }
     },
     {
       title: '创建时间',
