@@ -17,6 +17,7 @@ interface Props {
 const PictureUploader: React.FC<Props> = (props) => {
   const { biz, value, onChange } = props;
   const [loading, setLoading] = useState(false);
+  const [localValue, setLocalValue] = useState<string | undefined>(value);
 
   const uploadProps: UploadProps = {
     name: 'file',
@@ -37,6 +38,7 @@ const PictureUploader: React.FC<Props> = (props) => {
         // 拼接完整图片路径
         const fullPath = COS_HOST + res.data;
         onChange?.(fullPath ?? '');
+        setLocalValue(fullPath)
         fileObj.onSuccess(fullPath);
       } catch (e: any) {
         message.error('上传失败，' + e.message);
@@ -55,7 +57,7 @@ const PictureUploader: React.FC<Props> = (props) => {
 
   return (
     <Upload {...uploadProps}>
-      {value ? <img src={value} alt="picture" style={{ width: '100%' }} /> : uploadButton}
+      {localValue ? <img src={localValue} alt="picture" style={{ width: '100%' }} /> : uploadButton}
     </Upload>
   );
 };
