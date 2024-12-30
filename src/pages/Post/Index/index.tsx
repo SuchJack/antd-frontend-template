@@ -1,13 +1,14 @@
-import { PageContainer } from '@ant-design/pro-components';
+import {PageContainer, ProFormSelect, ProFormText, QueryFilter} from '@ant-design/pro-components';
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Card, List, message, Space, Tag, Typography } from 'antd';
+import {Avatar, Button, Card, Flex, List, message, Space, Tabs, Tag, Typography} from 'antd';
 import { LikeOutlined, MessageOutlined, StarOutlined, UserOutlined } from '@ant-design/icons';
 import { listPostVoByPageUsingPost } from '@/services/backend/postController';
 import moment from 'moment';
 import { doThumbUsingPost } from '@/services/backend/postThumbController';
 import { doPostFavourUsingPost } from '@/services/backend/postFavourController';
-import CreateModal from '@/pages/Post/components/CreateModal';
-import UpdateModal from '@/pages/Post/components/UpdateModal';
+import CreateModal from '@/pages/Post/Index/components/CreateModal';
+import UpdateModal from '@/pages/Post/Index/components/UpdateModal';
+import { Input } from 'antd/lib';
 
 const { Text, Paragraph } = Typography;
 
@@ -122,8 +123,30 @@ const PostPage: React.FC = () => {
   );
 
   return (
-    <PageContainer
-      extra={[
+    <PageContainer title={<></>}>
+      <Flex justify="center">
+        <Input.Search
+          style={{
+            width: '40vw',
+            minWidth: 320,
+          }}
+          placeholder="搜索文章"
+          allowClear
+          enterButton="搜索"
+          size="large"
+          onChange={(e) => {
+            searchParams.searchText = e.target.value;
+          }}
+          onSearch={(value: string) => {
+            setSearchParams({
+              ...DEFAULT_PAGE_PARAMS,
+              searchText: value,
+            });
+          }}
+        />
+      </Flex>
+      <div style={{marginBottom: 16}}/>
+      <Card>
         <Button
           key="create"
           type="primary"
@@ -132,9 +155,45 @@ const PostPage: React.FC = () => {
           }}
         >
           发布
-        </Button>,
-      ]}
-    >
+        </Button>
+      </Card>
+      <Tabs
+        size="large"
+        defaultActiveKey="newest"
+        items={[
+          {
+            key: 'newest',
+            label: `最新`,
+          },
+          {
+            key: 'recommend',
+            label: `推荐`,
+          }
+        ]}
+      />
+
+      <QueryFilter
+        span={12}
+        labelWidth="auto"
+        labelAlign="left"
+        defaultCollapsed={false}
+        style={{padding: '16px 0'}}
+        onFinish={async (values: API.PostQueryRequest) => {
+          setSearchParams({
+            ...DEFAULT_PAGE_PARAMS,
+            ...values,
+            searchText: searchParams.searchText,
+          });
+        }}
+      >
+        <ProFormText label="名称" name="title"/>
+        <ProFormText label="文本" name="content"/>
+        {/*<ProFormText label="作者" name="user"/>*/}
+        <ProFormSelect label="标签" name="tags" mode="tags"/>
+      </QueryFilter>
+
+      <div style={{marginBottom: 24}}/>
+
       <Card loading={loading}>
         <List<API.PostVO>
           itemLayout="vertical"
@@ -167,7 +226,7 @@ const PostPage: React.FC = () => {
                   onClick={() => handleThumb(item.id as number)}
                   highlighted={item.hasThumb}
                 />,
-                <IconText key={item.id} icon={MessageOutlined} text={'22'} />,
+                <IconText key={item.id} icon={MessageOutlined} text={'22'}/>,
                 <IconText
                   key={item.id}
                   icon={StarOutlined}
@@ -201,7 +260,7 @@ const PostPage: React.FC = () => {
                 avatar={
                   <Avatar
                     src={item.user?.userAvatar}
-                    icon={!item.user?.userAvatar && <UserOutlined />}
+                    icon={!item.user?.userAvatar && <UserOutlined/>}
                   />
                 }
                 title={
@@ -209,7 +268,7 @@ const PostPage: React.FC = () => {
                     <a className="post-title" href={`/post/${item.id}`}>
                       {item.title}
                     </a>
-                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                    <Text type="secondary" style={{fontSize: '12px'}}>
                       {moment(item.createTime).format('YYYY-MM-DD HH:mm')}
                     </Text>
                   </Space>
@@ -221,8 +280,8 @@ const PostPage: React.FC = () => {
                 }
               />
               <Paragraph
-                ellipsis={{ rows: 2, expandable: true, symbol: '展开' }}
-                style={{ marginBottom: 8 }}
+                ellipsis={{rows: 2, expandable: true, symbol: '展开'}}
+                style={{marginBottom: 8}}
               >
                 {item.content}
               </Paragraph>

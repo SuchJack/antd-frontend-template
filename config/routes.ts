@@ -23,8 +23,15 @@ export default [
   {
     path: '/post',
     icon: 'table',
-    component: './Post/',
+    component: './Post/Index',
     name: '论坛文章',
+  },
+  {
+    path: '/post/:id',
+    icon: 'table',
+    component: './Post/Detail',
+    name: '文章详情',
+    hideInMenu: true,
   },
   {
     path: '/admin',
