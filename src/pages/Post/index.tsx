@@ -23,7 +23,6 @@ const PostPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [dataList, setDataList] = useState<API.PostVO[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const actionRef = useRef<ActionType>();
   const [searchParams, setSearchParams] = useState<API.PostQueryRequest>({
     ...DEFAULT_PAGE_PARAMS,
   });
@@ -45,10 +44,22 @@ const PostPage: React.FC = () => {
   }, [searchParams]);
 
 
+  // 处理点赞
   const handleThumb =  async (postId: number) => {
     if (postId) {
       try {
         const res = await doThumbUsingPost({postId})
+        // 更新本地数据状态
+        setDataList(dataList.map(item => {
+          if (item.id === postId) {
+            return {
+              ...item,
+              hasThumb: !item.hasThumb,
+              thumbNum: item.hasThumb ? (item.thumbNum ?? 1) - 1 : (item.thumbNum ?? 0) + 1,
+            };
+          }
+          return item;
+        }));
         message.success(res.data === 1 ? '点赞成功' : '取消点赞成功');
       } catch (e: any) {
         message.error('点赞失败,' + e.message);
@@ -60,9 +71,20 @@ const PostPage: React.FC = () => {
     if (postId) {
       try {
         const res = await doPostFavourUsingPost({postId})
+        // 更新本地数据状态
+        setDataList(dataList.map(item => {
+          if (item.id === postId) {
+            return {
+              ...item,
+              hasFavour: !item.hasFavour,
+              favourNum: item.hasFavour ? (item.favourNum ?? 1) - 1 : (item.favourNum ?? 0) + 1,
+            };
+          }
+          return item;
+        }));
         message.success(res.data === 1 ? '收藏成功' : '取消收藏成功');
       } catch (e: any) {
-        message.error('点赞失败,' + e.message);
+        message.error('收藏失败,' + e.message);
       }
     }
   };
@@ -113,7 +135,7 @@ const PostPage: React.FC = () => {
               key={item.id}
               actions={[
                 <IconText key={item.id} icon={LikeOutlined} text={String(item.thumbNum ?? 0)}  onClick={() => handleThumb((item.id) as number)} highlighted={item.hasThumb}/>,
-                <IconText key={item.id} icon={MessageOutlined} text={String(item.thumbNum ?? 0)} />,
+                <IconText key={item.id} icon={MessageOutlined} text={'22'} />,
                 <IconText key={item.id} icon={StarOutlined} text={String(item.favourNum ?? 0)} onClick={() => handleFavour((item.id) as number)} highlighted={item.hasFavour}/>,
               ]}
               extra={
