@@ -153,18 +153,6 @@ const Welcome: React.FC = () => {
               title="//TODO"
               desc="完成论坛的富文本编辑器的完善;完成文章主页图的上传COS逻辑(参考编程导航);完成文章管理页的开发"
             />
-            <InfoCard
-              index={5}
-              title="了解 ant design"
-              href="https://ant.design"
-              desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
-            />
-            <InfoCard
-              index={6}
-              title="了解 Pro Components"
-              href="https://procomponents.ant.design"
-              desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
-            />
           </div>
         </div>
       </Card>
