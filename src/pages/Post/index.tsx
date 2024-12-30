@@ -1,11 +1,13 @@
-import {ActionType, PageContainer} from '@ant-design/pro-components';
-import React, {useEffect, useRef, useState} from 'react';
-import { Avatar, Card, List, message, Space, Tag, Typography } from 'antd';
+import { PageContainer } from '@ant-design/pro-components';
+import React, { useEffect, useState } from 'react';
+import { Avatar, Button, Card, List, message, Space, Tag, Typography } from 'antd';
 import { LikeOutlined, MessageOutlined, StarOutlined, UserOutlined } from '@ant-design/icons';
 import { listPostVoByPageUsingPost } from '@/services/backend/postController';
 import moment from 'moment';
-import {doThumbUsingPost} from "@/services/backend/postThumbController";
-import {doPostFavourUsingPost} from "@/services/backend/postFavourController";
+import { doThumbUsingPost } from '@/services/backend/postThumbController';
+import { doPostFavourUsingPost } from '@/services/backend/postFavourController';
+import CreateModal from '@/pages/Post/components/CreateModal';
+import UpdateModal from '@/pages/Post/components/UpdateModal';
 
 const { Text, Paragraph } = Typography;
 
@@ -27,6 +29,10 @@ const PostPage: React.FC = () => {
     ...DEFAULT_PAGE_PARAMS,
   });
 
+  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  const [currentRow, setCurrentRow] = useState<API.PostVO>();
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -43,23 +49,24 @@ const PostPage: React.FC = () => {
     loadData();
   }, [searchParams]);
 
-
   // 处理点赞
-  const handleThumb =  async (postId: number) => {
+  const handleThumb = async (postId: number) => {
     if (postId) {
       try {
-        const res = await doThumbUsingPost({postId})
+        const res = await doThumbUsingPost({ postId });
         // 更新本地数据状态
-        setDataList(dataList.map(item => {
-          if (item.id === postId) {
-            return {
-              ...item,
-              hasThumb: !item.hasThumb,
-              thumbNum: item.hasThumb ? (item.thumbNum ?? 0) - 1 : (item.thumbNum ?? 0) + 1,
-            };
-          }
-          return item;
-        }));
+        setDataList(
+          dataList.map((item) => {
+            if (item.id === postId) {
+              return {
+                ...item,
+                hasThumb: !item.hasThumb,
+                thumbNum: item.hasThumb ? (item.thumbNum ?? 0) - 1 : (item.thumbNum ?? 0) + 1,
+              };
+            }
+            return item;
+          }),
+        );
         message.success(res.data === 1 ? '点赞成功' : '取消点赞成功');
       } catch (e: any) {
         message.error('点赞失败,' + e.message);
@@ -70,18 +77,20 @@ const PostPage: React.FC = () => {
   const handleFavour = async (postId: number) => {
     if (postId) {
       try {
-        const res = await doPostFavourUsingPost({postId})
+        const res = await doPostFavourUsingPost({ postId });
         // 更新本地数据状态
-        setDataList(dataList.map(item => {
-          if (item.id === postId) {
-            return {
-              ...item,
-              hasFavour: !item.hasFavour,
-              favourNum: item.hasFavour ? (item.favourNum ?? 0) - 1 : (item.favourNum ?? 0) + 1,
-            };
-          }
-          return item;
-        }));
+        setDataList(
+          dataList.map((item) => {
+            if (item.id === postId) {
+              return {
+                ...item,
+                hasFavour: !item.hasFavour,
+                favourNum: item.hasFavour ? (item.favourNum ?? 0) - 1 : (item.favourNum ?? 0) + 1,
+              };
+            }
+            return item;
+          }),
+        );
         message.success(res.data === 1 ? '收藏成功' : '取消收藏成功');
       } catch (e: any) {
         message.error('收藏失败,' + e.message);
@@ -89,7 +98,12 @@ const PostPage: React.FC = () => {
     }
   };
 
-  const IconText = ({ icon, text, onClick, highlighted }: {
+  const IconText = ({
+    icon,
+    text,
+    onClick,
+    highlighted,
+  }: {
     icon: React.FC;
     text: string;
     onClick?: () => void;
@@ -108,15 +122,27 @@ const PostPage: React.FC = () => {
   );
 
   return (
-    <PageContainer>
+    <PageContainer
+      extra={[
+        <Button
+          key="create"
+          type="primary"
+          onClick={() => {
+            setCreateModalVisible(true);
+          }}
+        >
+          发布
+        </Button>,
+      ]}
+    >
       <Card loading={loading}>
         <List<API.PostVO>
           itemLayout="vertical"
           size="large"
           pagination={{
-            current:searchParams.current,
+            current: searchParams.current,
             pageSize: searchParams.pageSize,
-            onChange: (current:number, pageSize:number) => {
+            onChange: (current: number, pageSize: number) => {
               setSearchParams({
                 ...searchParams,
                 current,
@@ -134,14 +160,35 @@ const PostPage: React.FC = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key={item.id} icon={LikeOutlined} text={String(item.thumbNum ?? 0)}  onClick={() => handleThumb((item.id) as number)} highlighted={item.hasThumb}/>,
+                <IconText
+                  key={item.id}
+                  icon={LikeOutlined}
+                  text={String(item.thumbNum ?? 0)}
+                  onClick={() => handleThumb(item.id as number)}
+                  highlighted={item.hasThumb}
+                />,
                 <IconText key={item.id} icon={MessageOutlined} text={'22'} />,
-                <IconText key={item.id} icon={StarOutlined} text={String(item.favourNum ?? 0)} onClick={() => handleFavour((item.id) as number)} highlighted={item.hasFavour}/>,
+                <IconText
+                  key={item.id}
+                  icon={StarOutlined}
+                  text={String(item.favourNum ?? 0)}
+                  onClick={() => handleFavour(item.id as number)}
+                  highlighted={item.hasFavour}
+                />,
+                <Button
+                  key={item.id}
+                  onClick={() => {
+                    setUpdateModalVisible(true);
+                    setCurrentRow(item);
+                  }}
+                >
+                  编辑
+                </Button>,
               ]}
               extra={
-                item.tagList && (
+                item.tags && (
                   <Space wrap>
-                    {item.tagList?.map((tag) => (
+                    {item.tags?.map((tag) => (
                       <Tag key={tag} color="blue">
                         {tag}
                       </Tag>
@@ -183,6 +230,27 @@ const PostPage: React.FC = () => {
           )}
         />
       </Card>
+      <CreateModal
+        visible={createModalVisible}
+        onSubmit={() => {
+          setCreateModalVisible(false);
+          loadData();
+        }}
+        onCancel={() => {
+          setCreateModalVisible(false);
+        }}
+      ></CreateModal>
+      <UpdateModal
+        visible={updateModalVisible}
+        onSubmit={() => {
+          setUpdateModalVisible(false);
+          loadData();
+        }}
+        onCancel={() => {
+          setUpdateModalVisible(false);
+        }}
+        oldData={currentRow}
+      ></UpdateModal>
     </PageContainer>
   );
 };
