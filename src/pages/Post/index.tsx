@@ -9,7 +9,7 @@ const { Text, Paragraph } = Typography;
 
 const DEFAULT_PAGE_PARAMS: PageRequest = {
   current: 1,
-  pageSize: 8,
+  pageSize: 5,
   sortField: 'createTime',
   sortOrder: 'descend',
 };
@@ -65,6 +65,7 @@ const PostPage: React.FC = () => {
               });
             },
             total: total,
+            pageSizeOptions: ['5', '10', '15', '20'],
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total) => `总共 ${total} 条`,
