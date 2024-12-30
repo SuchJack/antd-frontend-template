@@ -14,7 +14,7 @@ const ModuleDemo: React.FC = () => {
       </Row>
       <Row>
         <Card title={'图片上传组件'}>
-          <PictureUploader biz="generator_picture" />
+          <PictureUploader biz="generator_picture"/>
         </Card>
       </Row>
     </PageContainer>

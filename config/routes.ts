@@ -21,6 +21,12 @@ export default [
     name: '封装的模块测试',
   },
   {
+    path: '/post',
+    icon: 'table',
+    component: './Post/',
+    name: '论坛文章',
+  },
+  {
     path: '/admin',
     icon: 'crown',
     name: '管理页',
