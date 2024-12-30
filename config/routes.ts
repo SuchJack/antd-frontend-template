@@ -27,10 +27,17 @@ export default [
     name: '论坛文章',
   },
   {
-    path: '/post/:id',
+    path: '/post/detail/:id',
     icon: 'table',
     component: './Post/Detail',
     name: '文章详情',
+    hideInMenu: true,
+  },
+  {
+    path: '/post/editor/:id',
+    icon: 'table',
+    component: './Post/Editor',
+    name: '文章编辑',
     hideInMenu: true,
   },
   {

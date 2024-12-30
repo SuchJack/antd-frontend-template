@@ -1,6 +1,6 @@
-import {PageContainer, ProFormSelect, ProFormText, QueryFilter} from '@ant-design/pro-components';
+import { PageContainer, ProFormSelect, ProFormText, QueryFilter } from '@ant-design/pro-components';
 import React, { useEffect, useState } from 'react';
-import {Avatar, Button, Card, Flex, List, message, Space, Tabs, Tag, Typography} from 'antd';
+import { Avatar, Button, Card, Flex, List, message, Space, Tabs, Tag, Typography } from 'antd';
 import { LikeOutlined, MessageOutlined, StarOutlined, UserOutlined } from '@ant-design/icons';
 import { listPostVoByPageUsingPost } from '@/services/backend/postController';
 import moment from 'moment';
@@ -9,6 +9,8 @@ import { doPostFavourUsingPost } from '@/services/backend/postFavourController';
 import CreateModal from '@/pages/Post/Index/components/CreateModal';
 import UpdateModal from '@/pages/Post/Index/components/UpdateModal';
 import { Input } from 'antd/lib';
+import { Link } from '@@/exports';
+import ReactQuill from 'react-quill';
 
 const { Text, Paragraph } = Typography;
 
@@ -145,7 +147,7 @@ const PostPage: React.FC = () => {
           }}
         />
       </Flex>
-      <div style={{marginBottom: 16}}/>
+      <div style={{ marginBottom: 16 }} />
       <Card>
         <Button
           key="create"
@@ -168,7 +170,7 @@ const PostPage: React.FC = () => {
           {
             key: 'recommend',
             label: `推荐`,
-          }
+          },
         ]}
       />
 
@@ -177,7 +179,7 @@ const PostPage: React.FC = () => {
         labelWidth="auto"
         labelAlign="left"
         defaultCollapsed={false}
-        style={{padding: '16px 0'}}
+        style={{ padding: '16px 0' }}
         onFinish={async (values: API.PostQueryRequest) => {
           setSearchParams({
             ...DEFAULT_PAGE_PARAMS,
@@ -186,13 +188,13 @@ const PostPage: React.FC = () => {
           });
         }}
       >
-        <ProFormText label="名称" name="title"/>
-        <ProFormText label="文本" name="content"/>
+        <ProFormText label="名称" name="title" />
+        <ProFormText label="文本" name="content" />
         {/*<ProFormText label="作者" name="user"/>*/}
-        <ProFormSelect label="标签" name="tags" mode="tags"/>
+        <ProFormSelect label="标签" name="tags" mode="tags" />
       </QueryFilter>
 
-      <div style={{marginBottom: 24}}/>
+      <div style={{ marginBottom: 24 }} />
 
       <Card loading={loading}>
         <List<API.PostVO>
@@ -226,7 +228,7 @@ const PostPage: React.FC = () => {
                   onClick={() => handleThumb(item.id as number)}
                   highlighted={item.hasThumb}
                 />,
-                <IconText key={item.id} icon={MessageOutlined} text={'22'}/>,
+                <IconText key={item.id} icon={MessageOutlined} text={'22'} />,
                 <IconText
                   key={item.id}
                   icon={StarOutlined}
@@ -260,7 +262,7 @@ const PostPage: React.FC = () => {
                 avatar={
                   <Avatar
                     src={item.user?.userAvatar}
-                    icon={!item.user?.userAvatar && <UserOutlined/>}
+                    icon={!item.user?.userAvatar && <UserOutlined />}
                   />
                 }
                 title={
@@ -268,7 +270,7 @@ const PostPage: React.FC = () => {
                     <a className="post-title" href={`/post/${item.id}`}>
                       {item.title}
                     </a>
-                    <Text type="secondary" style={{fontSize: '12px'}}>
+                    <Text type="secondary" style={{ fontSize: '12px' }}>
                       {moment(item.createTime).format('YYYY-MM-DD HH:mm')}
                     </Text>
                   </Space>
@@ -280,10 +282,24 @@ const PostPage: React.FC = () => {
                 }
               />
               <Paragraph
-                ellipsis={{rows: 2, expandable: true, symbol: '展开'}}
-                style={{marginBottom: 8}}
+                ellipsis={{ rows: 2, expandable: true, symbol: '展开' }}
+                style={{ marginBottom: 8 }}
               >
-                {item.content}
+                <Link
+                  to={`/post/detail/${item.id}`}
+                  style={{ fontFamily: 'inherit', fontSize: 'inherit', color: 'inherit' }}
+                >
+                  {/*{item.content}*/}
+                    <ReactQuill
+                      value={item.content}
+                      readOnly={true}
+                      theme="bubble"
+                      style={{
+                        border: 'none',
+                        padding: 0,
+                      }}
+                    />
+                </Link>
               </Paragraph>
             </List.Item>
           )}
