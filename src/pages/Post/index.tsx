@@ -55,7 +55,7 @@ const PostPage: React.FC = () => {
             return {
               ...item,
               hasThumb: !item.hasThumb,
-              thumbNum: item.hasThumb ? (item.thumbNum ?? 1) - 1 : (item.thumbNum ?? 0) + 1,
+              thumbNum: item.hasThumb ? (item.thumbNum ?? 0) - 1 : (item.thumbNum ?? 0) + 1,
             };
           }
           return item;
@@ -77,7 +77,7 @@ const PostPage: React.FC = () => {
             return {
               ...item,
               hasFavour: !item.hasFavour,
-              favourNum: item.hasFavour ? (item.favourNum ?? 1) - 1 : (item.favourNum ?? 0) + 1,
+              favourNum: item.hasFavour ? (item.favourNum ?? 0) - 1 : (item.favourNum ?? 0) + 1,
             };
           }
           return item;
