@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { GetProp, Image, message, Upload, UploadFile, UploadProps } from 'antd';
 import { uploadFileUsingPost } from '@/services/backend/fileController';
-import {COS_HOST} from "@/constants";
+import { COS_HOST } from '@/constants';
 
 interface Props {
   biz: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string[]) => void;
   value?: string[];
 }
 
@@ -26,7 +26,6 @@ const PicturesUploader: React.FC<Props> = (props) => {
   const [previewImage, setPreviewImage] = useState('');
   // @ts-ignore
   const [fileList, setFileList] = useState<UploadFile[]>(value);
-  const [loading, setLoading] = useState(false);
 
   const handlePreview = async (file: UploadFile) => {
     console.log('handlePreview函数调用了...')
@@ -40,6 +39,7 @@ const PicturesUploader: React.FC<Props> = (props) => {
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    console.log(fileList)
     // 转换文件列表，确保 url 字段正确
     const processedFileList = newFileList.map(file => {
       if (file.status === 'done' && file.response) {
@@ -57,14 +57,13 @@ const PicturesUploader: React.FC<Props> = (props) => {
     const urls = processedFileList
       .filter(file => file.status === 'done')
       .map(file => file.url);
-    // @ts-ignore
     onChange?.(urls);
   };
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>上传</div>
     </button>
   );
 
@@ -73,8 +72,25 @@ const PicturesUploader: React.FC<Props> = (props) => {
     fileList: fileList,
     onPreview: handlePreview,
     onChange: handleChange,
+    // 限制文件类型为图片
+    accept: 'image/*',
+    // 上传前校验
+    // beforeUpload: (file) => {
+    //   // 检查文件类型
+    //   const isImage = file.type.startsWith('image/');
+    //   if (!isImage) {
+    //     message.error('只能上传图片文件！');
+    //     return false;
+    //   }
+    //   // 检查文件大小（这里限制为 10MB）
+    //   const isLt5M = file.size / 1024 / 1024 < 10;
+    //   if (!isLt5M) {
+    //     message.error('图片必须小于 10MB！');
+    //     return false;
+    //   }
+    //   return true;
+    // },
     customRequest: async (fileObj: any) => {
-      setLoading(true);
       try {
         const res = await uploadFileUsingPost(
           {
@@ -83,19 +99,17 @@ const PicturesUploader: React.FC<Props> = (props) => {
           {},
           fileObj.file,
         );
-        console.log(res)
         const fullPath = COS_HOST + res.data;
         fileObj.onSuccess(fullPath);
       }catch (e:any){
         message.error('上传失败,' + e.message)
         fileObj.onError(e)
       }
-      setLoading(false);
     },
   };
   return (
     <>
-      <Upload {...uploadProps}>{fileList.length >= 8 ? null : uploadButton}</Upload>
+      <Upload {...uploadProps}>{fileList.length >= 9 ? null : uploadButton}</Upload>
       {previewImage && (
         <Image
           wrapperStyle={{ display: 'none' }}
