@@ -1,6 +1,7 @@
 ﻿import { BACKEND_HOST_LOCAL, BACKEND_HOST_PROD } from '@/constants';
 import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
+import {message} from "antd";
 
 // 与后端约定的响应数据格式
 interface ResponseStructure {
@@ -65,7 +66,8 @@ export const requestConfig: RequestConfig = {
       }
 
       if (code !== 0) {
-        throw new Error(data.message ?? '服务器错误');
+        message.error(data.message ?? '服务器错误');
+        // throw new Error(data.message ?? '服务器错误');
       }
       return response;
     },
