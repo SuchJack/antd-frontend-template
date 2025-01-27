@@ -109,6 +109,7 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+    userSex?: number;
   };
 
   type OrderItem = {
@@ -271,6 +272,7 @@ declare namespace API {
     userPassword?: string;
     userProfile?: string;
     userRole?: string;
+    userSex?: number;
   };
 
   type UserAddRequest = {
@@ -301,6 +303,7 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+    userSex?: number;
   };
 
   type UserRegisterRequest = {
@@ -313,6 +316,7 @@ declare namespace API {
     userAvatar?: string;
     userName?: string;
     userProfile?: string;
+    userSex?: number;
   };
 
   type UserUpdateRequest = {
@@ -321,6 +325,7 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+    userSex?: number;
   };
 
   type UserVO = {
@@ -330,5 +335,6 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+    userSex?: number;
   };
 }

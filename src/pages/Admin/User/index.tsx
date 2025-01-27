@@ -107,6 +107,18 @@ const UserAdminPage: React.FC = () => {
       valueType: 'textarea',
     },
     {
+      title: '性别',
+      dataIndex: 'userSex',
+      valueEnum: {
+        '0': {
+          text: '女',
+        },
+        '1': {
+          text: '男',
+        },
+      }
+    },
+    {
       title: '用户角色',
       dataIndex: 'userRole',
       valueEnum: {

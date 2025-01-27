@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** addUser POST /api/user/add */
+/** addUser(op) POST /api/user/add */
 export async function addUserUsingPost(body: API.UserAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseLong_>('/api/user/add', {
     method: 'POST',
@@ -14,7 +14,7 @@ export async function addUserUsingPost(body: API.UserAddRequest, options?: { [ke
   });
 }
 
-/** deleteUser POST /api/user/delete */
+/** deleteUser(op) POST /api/user/delete */
 export async function deleteUserUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
@@ -29,7 +29,7 @@ export async function deleteUserUsingPost(
   });
 }
 
-/** getUserById GET /api/user/get */
+/** getUserById(op) GET /api/user/get */
 export async function getUserByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getUserByIdUsingGETParams,
@@ -44,8 +44,8 @@ export async function getUserByIdUsingGet(
   });
 }
 
-/** getLoginUser GET /api/user/get/login */
-export async function getLoginUserUsingGet(options?: { [key: string]: any }) {
+/** getLoginUserVO GET /api/user/get/login */
+export async function getLoginUserVoUsingGet(options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO_>('/api/user/get/login', {
     method: 'GET',
     ...(options || {}),
@@ -67,7 +67,7 @@ export async function getUserVoByIdUsingGet(
   });
 }
 
-/** listUserByPage POST /api/user/list/page */
+/** listUserByPage(op) POST /api/user/list/page */
 export async function listUserByPageUsingPost(
   body: API.UserQueryRequest,
   options?: { [key: string]: any },
@@ -150,7 +150,7 @@ export async function userRegisterUsingPost(
   });
 }
 
-/** updateUser POST /api/user/update */
+/** updateUser(op) POST /api/user/update */
 export async function updateUserUsingPost(
   body: API.UserUpdateRequest,
   options?: { [key: string]: any },
